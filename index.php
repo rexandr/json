@@ -9,6 +9,12 @@ function userContacts()
     echo '<pre>';
     print_r($jsonArray);
     echo '</pre>';
+
+    foreach ($jsonArray['users'] as $user)
+    {
+        echo $user['name'].'<br>';
+    }
+
 }
 
 userContacts();
