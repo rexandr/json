@@ -6,10 +6,6 @@ function userContacts()
         $jsonArray = json_decode($json, true);
     }
 
-    echo '<pre>';
-    print_r($jsonArray);
-    echo '</pre>';
-
     foreach ($jsonArray['contacts'] as $contact) {
         $user = array_search($contact['user'], array_column($jsonArray['users'], 'id'));
         $role = array_search($jsonArray['users'][$user]['role'], array_column($jsonArray['roles'], 'id'));
