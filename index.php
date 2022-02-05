@@ -12,8 +12,9 @@ function userContacts()
 
     foreach ($jsonArray['contacts'] as $contact) {
         $user = array_search($contact['user'], array_column($jsonArray['users'], 'id'));
-
-        echo $jsonArray['users'][$user]['name'].$contact['firstName'].$contact['lastName'].'<br>';
+        $role = array_search($jsonArray['users'][$user]['role'], array_column($jsonArray['roles'], 'id'));
+        echo $jsonArray['users'][$user]['name'].', '.$contact['firstName'].' '.$contact['lastName'].', '.
+            $jsonArray['roles'][$role]['roleName'].', '.'<br>';
 
     }
 }
