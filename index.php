@@ -9,6 +9,7 @@
 </head>
 <body>
 <a href="/">Home</a>
+
 <h1>Roles</h1>
 <?php foreach (rolesRead() as $values) { ?>
     <?= $values['roleName'] ?><br>
@@ -19,10 +20,24 @@
     <input type="text" name="role">
     <input type="submit" value="Add"><br><br>
 </form>
+
+<h1>Permissions</h1>
+<?php foreach (permissionsRead() as $values) { ?>
+    <?= $values['value'] ?><br>
+<?php } ?>
+
+<form action="" method="post">
+    <h3>Add role</h3>
+    <input type="text" name="permission">
+    <input type="submit" value="Add"><br><br>
+</form>
 </body>
 </html>
 
 <?php
+
+userContacts();
+
 function userContacts()
 {
     if (file_exists('test.json')) {
@@ -34,6 +49,14 @@ function userContacts()
     {
         $id = count($jsonArray['roles'])+1;
         $jsonArray['roles'][]=['id'=>$id, 'roleName'=>$_POST['role']];
+        file_put_contents('test.json', json_encode($jsonArray));
+        unset($_POST);
+    }
+
+    if (isset($_POST['permission']))
+    {
+        $id = count($jsonArray['permissions'])+1;
+        $jsonArray['permissions'][]=['id'=>$id, 'value'=>$_POST['permission']];
         file_put_contents('test.json', json_encode($jsonArray));
         unset($_POST);
     }
@@ -54,8 +77,19 @@ function rolesRead()
         $jsonArray = json_decode($json, true);
         $roles=$jsonArray['roles'];
     }
+    $roles=$jsonArray['roles'];
 
     return $roles;
 }
 
-userContacts();
+function permissionsRead()
+{
+    if (file_exists('test.json')) {
+        $json = file_get_contents('test.json');
+        $jsonArray = json_decode($json, true);
+        $permissions=$jsonArray['permissions'];
+    }
+
+    return $permissions;
+}
+
