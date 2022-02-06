@@ -64,6 +64,27 @@
     <input type="submit" value="Add"><br><br>
 </form>
 
+
+<h1>Contacts</h1>
+<?php foreach (contactRead() as $values) { ?>
+    <?= $values['firstName'] ?> <?= $values['lastName'] ?><br>
+<?php } ?>
+
+<form action="" method="post">
+    <h3>Add contact</h3>
+    <div>
+        <h6>Users</h6>
+        <?php foreach (usersRead() as $values) { ?>
+            <input type="radio" id="user" name="user" value="<?= $values['id'] ?>">
+            <label for="role"><?= $values['name'] ?></label>
+            <br>
+        <?php } ?>
+    </div>
+    FirstName <input type="text" name="firstName">
+    LastName <input type="text" name="lastName">
+    <input type="submit" value="Add"><br><br>
+</form>
+
 </body>
 </html>
 
@@ -93,9 +114,16 @@ function userContacts()
     }
 
     if (isset($_POST['users'])) {
-        
+
         $id = count($jsonArray['users']) + 1;
         $jsonArray['users'][] = ['id' => $id, 'name' => $_POST['users'], 'role' => $_POST['roles'], 'permissions' => $_POST['permissions']];
+        file_put_contents('test.json', json_encode($jsonArray));
+        unset($_POST);
+    }
+
+    if (isset($_POST['lastName'])) {
+
+        $jsonArray['contacts'][] = ['user' => $_POST['user'], 'firstName' => $_POST['firstName'], 'lastName' => $_POST['lastName']];
         file_put_contents('test.json', json_encode($jsonArray));
         unset($_POST);
     }
@@ -138,6 +166,17 @@ function usersRead()
         $json = file_get_contents('test.json');
         $jsonArray = json_decode($json, true);
         $users = $jsonArray['users'];
+    }
+
+    return $users;
+}
+
+function contactRead()
+{
+    if (file_exists('test.json')) {
+        $json = file_get_contents('test.json');
+        $jsonArray = json_decode($json, true);
+        $users = $jsonArray['contacts'];
     }
 
     return $users;
