@@ -104,6 +104,7 @@
 
 <?php
 
+$j = '';
 
 function userContacts()
 {
@@ -148,50 +149,36 @@ function userContacts()
         echo $jsonArray['users'][$user]['name'] . ', ' . $contact['firstName'] . ' ' . $contact['lastName'] . ', ' .
             $jsonArray['roles'][$role]['roleName'] . ' - ' . $jsonArray['permissions'][$permission]['value'] . '<br>';
     }
+
+    $GLOBALS['j'] = $jsonArray;
 }
 
 function rolesRead()
 {
-    if (file_exists('test.json')) {
-        $json = file_get_contents('test.json');
-        $jsonArray = json_decode($json, true);
-        $roles = $jsonArray['roles'];
-    }
-    $roles = $jsonArray['roles'];
+
+    $roles = $GLOBALS['j']['roles'];
 
     return $roles;
 }
 
 function permissionsRead()
 {
-    if (file_exists('test.json')) {
-        $json = file_get_contents('test.json');
-        $jsonArray = json_decode($json, true);
-        $permissions = $jsonArray['permissions'];
-    }
+    $permissions = $roles = $GLOBALS['j']['permissions'];
 
     return $permissions;
 }
 
 function usersRead()
 {
-    if (file_exists('test.json')) {
-        $json = file_get_contents('test.json');
-        $jsonArray = json_decode($json, true);
-        $users = $jsonArray['users'];
-    }
+    $users = $GLOBALS['j']['users'];
 
     return $users;
 }
 
 function contactRead()
 {
-    if (file_exists('test.json')) {
-        $json = file_get_contents('test.json');
-        $jsonArray = json_decode($json, true);
-        $users = $jsonArray['contacts'];
-    }
+    $contact = $GLOBALS['j']['contacts'];
 
-    return $users;
+    return $contact;
 }
 
