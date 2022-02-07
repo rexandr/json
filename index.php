@@ -4,6 +4,7 @@ class UserContactsList
 {
 
     public $file = 'test.json';
+    public $toString = [];
 
     function userContacts()
     {
@@ -45,11 +46,17 @@ class UserContactsList
             $user = array_search($contact['user'], array_column($jsonArray['users'], 'id'));
             $role = array_search($jsonArray['users'][$user]['role'], array_column($jsonArray['roles'], 'id'));
             $permission = array_search($jsonArray['users'][$user]['permissions'], array_column($jsonArray['permissions'], 'id'));
-            echo $jsonArray['users'][$user]['name'] . ', ' . $contact['firstName'] . ' ' . $contact['lastName'] . ', ' .
+
+            $this->toString[] =  $jsonArray['users'][$user]['name'] . ', ' . $contact['firstName'] . ' ' . $contact['lastName'] . ', ' .
                 $jsonArray['roles'][$role]['roleName'] . ' - ' . $jsonArray['permissions'][$permission]['value'] . '<br>';
         }
 
         return $jsonArray;
+    }
+
+    function toString()
+    {
+        return $this->toString;
     }
 
     function putContent($content)
@@ -113,7 +120,9 @@ $list = $object->userContacts();
 
 
 <div class="container">
-<!--    --><?//= $list = $object->userContacts(); ?>
+    <?php foreach ($object->toString as $values) { ?>
+        <?= $values ?>
+    <?php } ?>
 </div>
 
 <div class="container">
