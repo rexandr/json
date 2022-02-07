@@ -109,11 +109,10 @@ $file = 'test.json';
 
 function userContacts()
 {
-
     global $file;
 
-    if (file_exists($file)) {
-        $json = file_get_contents($file);
+    if (file_exists('test.json')) {
+        $json = file_get_contents('test.json');
         $jsonArray = json_decode($json, true);
     }
 
@@ -159,9 +158,7 @@ function userContacts()
 
 function putContent($content)
 {
-    global $file;
-
-    file_put_contents($file, json_encode($content));
+    file_put_contents('test.json', json_encode($content));
 }
 
 function rolesRead()
