@@ -116,14 +116,14 @@ function userContacts()
     if (isset($_POST['role'])) {
         $id = count($jsonArray['roles']) + 1;
         $jsonArray['roles'][] = ['id' => $id, 'roleName' => $_POST['role']];
-        file_put_contents('test.json', json_encode($jsonArray));
+        putContent($jsonArray);
         unset($_POST);
     }
 
     if (isset($_POST['permission'])) {
         $id = count($jsonArray['permissions']) + 1;
         $jsonArray['permissions'][] = ['id' => $id, 'value' => $_POST['permission']];
-        file_put_contents('test.json', json_encode($jsonArray));
+        putContent($jsonArray);
         unset($_POST);
     }
 
@@ -131,14 +131,14 @@ function userContacts()
 
         $id = count($jsonArray['users']) + 1;
         $jsonArray['users'][] = ['id' => $id, 'name' => $_POST['users'], 'role' => $_POST['roles'], 'permissions' => $_POST['permissions']];
-        file_put_contents('test.json', json_encode($jsonArray));
+        putContent($jsonArray);
         unset($_POST);
     }
 
     if (isset($_POST['lastName'])) {
 
         $jsonArray['contacts'][] = ['user' => $_POST['user'], 'firstName' => $_POST['firstName'], 'lastName' => $_POST['lastName']];
-        file_put_contents('test.json', json_encode($jsonArray));
+        putContent($jsonArray);
         unset($_POST);
     }
 
@@ -151,6 +151,11 @@ function userContacts()
     }
 
     $GLOBALS['j'] = $jsonArray;
+}
+
+function putContent($content)
+{
+    file_put_contents('test.json', json_encode($content));
 }
 
 function rolesRead()
