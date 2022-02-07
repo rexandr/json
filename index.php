@@ -59,7 +59,7 @@ $list = $object->userContacts();
         <div class="col">
             <h1>Users</h1>
             <?php foreach ($object->usersRead($list) as $values) { ?>
-                Name  - <?= $values['name'] ?><br>
+                <?= $values['name'] ?><br>
             <?php } ?>
 
             <form action="" method="post">
