@@ -1,3 +1,100 @@
+<?php
+
+class UserContactsList
+{
+
+    public $file = 'test.json';
+
+    function userContacts()
+    {
+        if (file_exists($this->file)) {
+            $json = file_get_contents($this->file);
+            $jsonArray = json_decode($json, true);
+        }
+
+        if (isset($_POST['role'])) {
+            $id = count($jsonArray['roles']) + 1;
+            $jsonArray['roles'][] = ['id' => $id, 'roleName' => $_POST['role']];
+            $this->putContent($jsonArray);
+            unset($_POST);
+        }
+
+        if (isset($_POST['permission'])) {
+            $id = count($jsonArray['permissions']) + 1;
+            $jsonArray['permissions'][] = ['id' => $id, 'value' => $_POST['permission']];
+            $this->putContent($jsonArray);
+            unset($_POST);
+        }
+
+        if (isset($_POST['users'])) {
+
+            $id = count($jsonArray['users']) + 1;
+            $jsonArray['users'][] = ['id' => $id, 'name' => $_POST['users'], 'role' => $_POST['roles'], 'permissions' => $_POST['permissions']];
+            $this->putContent($jsonArray);
+            unset($_POST);
+        }
+
+        if (isset($_POST['lastName'])) {
+
+            $jsonArray['contacts'][] = ['user' => $_POST['user'], 'firstName' => $_POST['firstName'], 'lastName' => $_POST['lastName']];
+            $this->putContent($jsonArray);
+            unset($_POST);
+        }
+
+        foreach ($jsonArray['contacts'] as $contact) {
+            $user = array_search($contact['user'], array_column($jsonArray['users'], 'id'));
+            $role = array_search($jsonArray['users'][$user]['role'], array_column($jsonArray['roles'], 'id'));
+            $permission = array_search($jsonArray['users'][$user]['permissions'], array_column($jsonArray['permissions'], 'id'));
+            echo $jsonArray['users'][$user]['name'] . ', ' . $contact['firstName'] . ' ' . $contact['lastName'] . ', ' .
+                $jsonArray['roles'][$role]['roleName'] . ' - ' . $jsonArray['permissions'][$permission]['value'] . '<br>';
+        }
+
+        return $jsonArray;
+    }
+
+    function putContent($content)
+    {
+        file_put_contents($this->file, json_encode($content));
+    }
+
+    function rolesRead($list)
+    {
+
+        $roles = $list['roles'];
+
+        return $roles;
+    }
+
+    function permissionsRead($list)
+    {
+        $permissions = $roles = $list['permissions'];
+
+        return $permissions;
+    }
+
+    function usersRead($list)
+    {
+        $users = $list['users'];
+
+        return $users;
+    }
+
+    function contactRead($list)
+    {
+        $contact = $list['contacts'];
+
+        return $contact;
+    }
+
+}
+
+$object = new UserContactsList();
+$list = $object->userContacts();
+
+
+?>
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -13,15 +110,17 @@
 
 <a href="/">Home</a>
 
+
+
 <div class="container">
-    <?= userContacts(); ?>
+<!--    --><?//= $list = $object->userContacts(); ?>
 </div>
 
 <div class="container">
     <div class="row">
         <div class="col">
             <h1>Roles</h1>
-            <?php foreach (rolesRead() as $values) { ?>
+            <?php foreach ($object->rolesRead($list) as $values) { ?>
                 <?= $values['roleName'] ?><br>
             <?php } ?>
 
@@ -33,7 +132,7 @@
         </div>
         <div class="col">
             <h1>Permissions</h1>
-            <?php foreach (permissionsRead() as $values) { ?>
+            <?php foreach ($object->permissionsRead($list) as $values) { ?>
                 <?= $values['value'] ?><br>
             <?php } ?>
 
@@ -45,7 +144,7 @@
         </div>
         <div class="col">
             <h1>Users</h1>
-            <?php foreach (usersRead() as $values) { ?>
+            <?php foreach ($object->usersRead($list) as $values) { ?>
                 Name  - <?= $values['name'] ?><br>
             <?php } ?>
 
@@ -53,7 +152,7 @@
                 <h3>Add user</h3>
                 <div>
                     <h6>User's permission</h6>
-                    <?php foreach (permissionsRead() as $values) { ?>
+                    <?php foreach ($object->permissionsRead($list) as $values) { ?>
                         <input type="radio" id="permission" name="permissions" value="<?= $values['id'] ?>">
                         <label for="permission"><?= $values['value'] ?></label>
                         <br>
@@ -62,7 +161,7 @@
 
                 <div>
                     <h6>User's role</h6>
-                    <?php foreach (rolesRead() as $values) { ?>
+                    <?php foreach ($object->rolesRead($list) as $values) { ?>
                         <input type="radio" id="role" name="roles" value="<?= $values['id'] ?>">
                         <label for="role"><?= $values['roleName'] ?></label>
                         <br>
@@ -75,7 +174,7 @@
         </div>
         <div class="col">
             <h1>Contacts</h1>
-            <?php foreach (contactRead() as $values) { ?>
+            <?php foreach ($object->contactRead($list) as $values) { ?>
                 <?= $values['firstName'] ?> <?= $values['lastName'] ?><br>
             <?php } ?>
 
@@ -83,7 +182,7 @@
                 <h3>Add contact</h3>
                 <div>
                     <h6>Users</h6>
-                    <?php foreach (usersRead() as $values) { ?>
+                    <?php foreach ($object->usersRead($list) as $values) { ?>
                         <input type="radio" id="user" name="user" value="<?= $values['id'] ?>">
                         <label for="role"><?= $values['name'] ?></label>
                         <br>
@@ -101,92 +200,4 @@
 </body>
 </html>
 
-
-<?php
-
-$j = '';
-$file = 'test.json';
-
-function userContacts()
-{
-    global $file;
-
-    if (file_exists('test.json')) {
-        $json = file_get_contents('test.json');
-        $jsonArray = json_decode($json, true);
-    }
-
-    if (isset($_POST['role'])) {
-        $id = count($jsonArray['roles']) + 1;
-        $jsonArray['roles'][] = ['id' => $id, 'roleName' => $_POST['role']];
-        putContent($jsonArray);
-        unset($_POST);
-    }
-
-    if (isset($_POST['permission'])) {
-        $id = count($jsonArray['permissions']) + 1;
-        $jsonArray['permissions'][] = ['id' => $id, 'value' => $_POST['permission']];
-        putContent($jsonArray);
-        unset($_POST);
-    }
-
-    if (isset($_POST['users'])) {
-
-        $id = count($jsonArray['users']) + 1;
-        $jsonArray['users'][] = ['id' => $id, 'name' => $_POST['users'], 'role' => $_POST['roles'], 'permissions' => $_POST['permissions']];
-        putContent($jsonArray);
-        unset($_POST);
-    }
-
-    if (isset($_POST['lastName'])) {
-
-        $jsonArray['contacts'][] = ['user' => $_POST['user'], 'firstName' => $_POST['firstName'], 'lastName' => $_POST['lastName']];
-        putContent($jsonArray);
-        unset($_POST);
-    }
-
-    foreach ($jsonArray['contacts'] as $contact) {
-        $user = array_search($contact['user'], array_column($jsonArray['users'], 'id'));
-        $role = array_search($jsonArray['users'][$user]['role'], array_column($jsonArray['roles'], 'id'));
-        $permission = array_search($jsonArray['users'][$user]['permissions'], array_column($jsonArray['permissions'], 'id'));
-        echo $jsonArray['users'][$user]['name'] . ', ' . $contact['firstName'] . ' ' . $contact['lastName'] . ', ' .
-            $jsonArray['roles'][$role]['roleName'] . ' - ' . $jsonArray['permissions'][$permission]['value'] . '<br>';
-    }
-
-    $GLOBALS['j'] = $jsonArray;
-}
-
-function putContent($content)
-{
-    file_put_contents('test.json', json_encode($content));
-}
-
-function rolesRead()
-{
-
-    $roles = $GLOBALS['j']['roles'];
-
-    return $roles;
-}
-
-function permissionsRead()
-{
-    $permissions = $roles = $GLOBALS['j']['permissions'];
-
-    return $permissions;
-}
-
-function usersRead()
-{
-    $users = $GLOBALS['j']['users'];
-
-    return $users;
-}
-
-function contactRead()
-{
-    $contact = $GLOBALS['j']['contacts'];
-
-    return $contact;
-}
 
