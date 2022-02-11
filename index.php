@@ -30,10 +30,20 @@ function rate()
 
     for ($i = 1; $i < (count($sentence) - 1); $i++) {
 
-        if ($i % 2 != 0 && $sentence[$i]> $sentence[$i-1]) {
+        if ($i % 2 != 0 && $sentence[$i+1] - $sentence[$i]<2) {
             $i++;
             continue;
         }
+
+//        if ($sentence[$i] - $sentence[$i+1] = 1 || $sentence[$i] - $sentence[$i+1] = 0){
+//            echo $sentence[$i] - $sentence[$i+1].'<br>';
+//            continue;
+//        }
+
+//        if ($sentence[$i] - $sentence[$i-1] < 2) {
+//            $i++;
+//            continue;
+//        }
 
         if ($i % 2 == 0 && $sentence[$i]< $sentence[$i-1]) {
             $i++;
@@ -44,7 +54,7 @@ function rate()
             $buffer .= '-' . $sentence[$i] . ', ';
         }elseif ($sentence[$i] > $sentence[$i + 2] && $i<(count($sentence) - 2)){
             continue;
-        }elseif ($sentence[$i] < $sentence[$i + 1]  && $i % 2 == 0) {
+        }elseif ($sentence[$i] < $sentence[$i + 1]  && $i % 2 == 0 ) {
             $buffer .= $sentence[$i];
         }
 
