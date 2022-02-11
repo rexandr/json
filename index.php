@@ -26,7 +26,7 @@ function rate()
             }
         }
     }
-    
+
     echo '<pre>';
     print_r($fromSentence);
     echo '</pre>';
@@ -52,7 +52,12 @@ function rate()
         if ($fromSentence[$i]<$toSentence[$i])
         {
             $buffer[] = $toSentence[$i];
-            $buffer[] = $fromSentence[$i+1]>$fromSentence[$i+2]?$fromSentence[$i+2]:$fromSentence[$i+1];
+            $buffer[] = $fromSentence[$i+1];
+        }
+
+        if ($fromSentence[$i+1]>$fromSentence[$i+2] && !empty($fromSentence[$i+2]))
+        {
+            $buffer[count($buffer)-1] = $fromSentence[$i+2];
         }
 
     }
