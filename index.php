@@ -14,11 +14,9 @@ function rate()
 
     $buffer = 'Mar ';
 
-
     foreach ($jsonArray as $arr) {
         foreach ($arr as $value) {
-            $month = mb_substr($value, 3, 2);
-            $sentence [] = $month;
+            $sentence [] = mb_substr($value, 3, 2);
         }
     }
 
@@ -26,79 +24,30 @@ function rate()
     print_r($sentence);
     echo '</pre>';
 
-    $buffer .= (int)$sentence[0];
+    $buffer = [];
 
-    for ($i = 1; $i < (count($sentence) - 1); $i++) {
+    $countArr = count($sentence);
 
-        if ($i % 2 != 0 && $sentence[$i+1] - $sentence[$i]<2) {
-            $i++;
-            continue;
+    $bufferIndex = 0;
+
+    foreach ($sentence as $key => $raw) {
+
+        $buffer[$bufferIndex] = $sentence[$bufferIndex];
+
+        for ($i = $key; $i < $countArr; $i++) {
+            if ($sentence[$i] <= $raw) {
+                $buffer[$bufferIndex] = $sentence[$i];
+                $bufferIndex++;
+            }
+
+            echo '<pre>';
+            print_r($buffer);
+            echo '</pre>';
         }
-
-//        if ($sentence[$i] - $sentence[$i+1] = 1 || $sentence[$i] - $sentence[$i+1] = 0){
-//            echo $sentence[$i] - $sentence[$i+1].'<br>';
-//            continue;
-//        }
-
-//        if ($sentence[$i] - $sentence[$i-1] < 2) {
-//            $i++;
-//            continue;
-//        }
-
-        if ($i % 2 == 0 && $sentence[$i]< $sentence[$i-1]) {
-            $i++;
-            continue;
-        }
-
-        if ($sentence[$i] < $sentence[$i + 1] && $i % 2 != 0) {
-            $buffer .= '-' . $sentence[$i] . ', ';
-        }elseif ($sentence[$i] > $sentence[$i + 2] && $i<(count($sentence) - 2)){
-            continue;
-        }elseif ($sentence[$i] < $sentence[$i + 1]  && $i % 2 == 0 ) {
-            $buffer .= $sentence[$i];
-        }
-
+        $bufferIndex++;
     }
-
-    echo $buffer .= '-' . $sentence[count($sentence) - 1];
-
 }
 
 rate();
 
 ?>
-
-<!--echo '<pre>';-->
-<!--    var_dump($sentence);-->
-<!--    echo '</pre>';-->
-<!---->
-<!--asort($sentence);-->
-<!---->
-<!--echo '<pre>';-->
-<!--    print_r($sentence);-->
-<!--    echo '</pre>';-->
-<!---->
-<!--$buffer .= (int)$sentence[0];-->
-<!---->
-<!--$i = 0;-->
-<!--$previous = (int)$sentence[0];-->
-<!---->
-<!--foreach ($sentence as $key => $value)-->
-<!--{-->
-<!---->
-<!--if ($key === 0){continue;}-->
-<!--$i++;-->
-<!--if ($key>$i)-->
-<!--{-->
-<!--continue;-->
-<!--}elseif(($value - $previous == 1)||($value - $previous == 0))-->
-<!--{-->
-<!--continue;-->
-<!--}-->
-<!--else{-->
-<!--$buffer .= $value;-->
-<!--}-->
-<!--$previous = $value;-->
-<!--}-->
-<!---->
-<!--echo $buffer;-->
