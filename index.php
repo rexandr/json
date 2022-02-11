@@ -15,37 +15,54 @@ function rate()
     $buffer = 'Mar ';
 
     foreach ($jsonArray as $arr) {
-        foreach ($arr as $value) {
-            $sentence [] = mb_substr($value, 3, 2);
+        foreach ($arr as $key=>$value) {
+            if ($key === 'from')
+            {
+                $fromSentence [] = mb_substr($value, 3, 2);
+            }
+            if ($key === 'to')
+            {
+                $toSentence [] = mb_substr($value, 3, 2);
+            }
         }
     }
-
+    
     echo '<pre>';
-    print_r($sentence);
+    print_r($fromSentence);
+    echo '</pre>';
+    echo '<pre>';
+    print_r($toSentence);
     echo '</pre>';
 
-    $buffer = [];
+    $buffer=[];
 
-    $countArr = count($sentence);
+    $buffer[] = $fromSentence[0];
 
-    $bufferIndex = 0;
+    $countArr = count($fromSentence)-1;
 
-    foreach ($sentence as $key => $raw) {
 
-        $buffer[$bufferIndex] = $sentence[$bufferIndex];
+    for ($i = 0; $i<$countArr; $i++)
+    {
 
-        for ($i = $key; $i < $countArr; $i++) {
-            if ($sentence[$i] <= $raw) {
-                $buffer[$bufferIndex] = $sentence[$i];
-                $bufferIndex++;
-            }
-
-            echo '<pre>';
-            print_r($buffer);
-            echo '</pre>';
+        if ($fromSentence[$i+1]<=$toSentence[$i] || $fromSentence[$i+1] - $toSentence[$i] < 2)
+        {
+            continue;
         }
-        $bufferIndex++;
+
+        if ($fromSentence[$i]<$toSentence[$i])
+        {
+            $buffer[] = $toSentence[$i];
+            $buffer[] = $fromSentence[$i+1]>$fromSentence[$i+2]?$fromSentence[$i+2]:$fromSentence[$i+1];
+        }
+
     }
+
+    $buffer[] = $toSentence[$countArr];
+
+    echo '<pre>';
+    print_r($buffer);
+    echo '</pre>';
+
 }
 
 rate();
