@@ -12,33 +12,36 @@ function rate()
 
     $sentence = [];
 
-    $bufer = 'Mar ';
+    $buffer = 'Mar ';
 
 
     foreach ($jsonArray as $arr) {
         foreach ($arr as $value) {
-                $month = mb_substr($value, 3, 2);
-                $sentence []= $month;
+            $month = mb_substr($value, 3, 2);
+            $sentence [] = $month;
         }
     }
 
-   echo '<pre>';
-   var_dump($sentence);
-   echo '</pre>';
+    echo '<pre>';
+    var_dump($sentence);
+    echo '</pre>';
 
-    $bufer .= (int)$sentence[0];
+    $buffer .= (int)$sentence[0];
 
-   for ($i = 1; $i<(count($sentence)-1); $i++)
-   {
-        if ($sentence[$i] < $sentence[$i+1] && $i%2 !== 0)
-        {
-            $bufer .= '-'.$sentence[$i].', ';
-        }else{
-            $bufer .= $sentence[$i];
+    for ($i = 1; $i < (count($sentence) - 1); $i++) {
+
+        if ($sentence[$i] < $sentence[$i + 1] && $i % 2 != 0) {
+            $buffer .= '-' . $sentence[$i] . ', ';
+            echo '!==0 _ '.$sentence[$i] .'-'. $sentence[$i + 1].'<br>';
+        }elseif ($sentence[$i] > $sentence[$i + 2] && $i<(count($sentence) - 2)){
+            continue;
+        }elseif ($sentence[$i] < $sentence[$i + 1]  && $i % 2 == 0) {
+            $buffer .= $sentence[$i];
+            echo '===0 _ '.$sentence[$i] .'-'. $sentence[$i + 1].'-'. $sentence[$i + 2].'<br>';
         }
-   }
+    }
 
-   echo $bufer .= '-'.$sentence[count($sentence)-1];
+    echo $buffer .= '-' . $sentence[count($sentence) - 1];
 
 }
 
