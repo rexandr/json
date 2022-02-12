@@ -1,9 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        #line_block {
+            width: 150px;
+            height: 50px;
+            float: left;
+            margin: 0 15px 15px 0;
+            text-align: left;
+            padding: 10px;
+        }
+    </style>
+    <title>json</title>
+</head>
+<body>
+<div style="width:100%; height:1px; clear:both;"></div>
+
+<div id="line_block"></div>
+<div id="line_block"><?php echo '<pre>';
+print_r(rate()[0]);
+echo '</pre>';?></div>
+<div id="line_block"><?php echo '<pre>';
+    print_r(rate()[1]);
+    echo '</pre>';?></div>
+<div id="line_block"><?php echo '<pre>';
+    print_r(rate()[2]);
+    echo '</pre>';?></div>
+<div id="line_block"><?php echo '<pre>';
+    print_r(rate()[3]);
+    echo '</pre>';?></div>
+<div id="line_block"><?php echo '<pre>';
+    print_r(rate()[4]);
+    echo '</pre>';?></div>
+
+<div style="width:100%; height:1px; clear:both;"></div>
+</body>
+</html>
+
+
 <?php
 function rate()
 {
     if (file_exists('test.json')) {
         $json = file_get_contents('test.json');
         $jsonArray = json_decode($json, true);
+
+        $arrayAr = [];
 
         foreach ($jsonArray as $arr) {
             foreach ($arr as $key => $value) {
@@ -15,15 +61,26 @@ function rate()
                 }
             }
         }
+        $arrayAr[] = $fromSentence;
+        $arrayAr[] = $toSentence;
+        asort($fromSentence);
+        asort($toSentence);
+        $arrayAr[] = $fromSentence;
+        $arrayAr[] = $toSentence;
 
         $month = month((int)mb_substr($value, 0, 2));
 
         $buffer = buffer($fromSentence, $toSentence);
 
-        echo arrayToString($month, $buffer);
-    }else{
+        $arrayAr[] = arrayToString($month, $buffer);
+        //echo arrayToString($month, $buffer);
+
+        return $arrayAr;
+    } else {
         echo "Choose a correct file!";
     }
+
+
 }
 
 function month($number)
@@ -73,18 +130,18 @@ function month($number)
 
 function arrayToString($month, $buffer)
 {
-    $string = $month.' ';
+    $string = $month . ' ';
 
-    for ($j = 0; $j < count($buffer)-1; $j++) {
+    for ($j = 0; $j < count($buffer) - 1; $j++) {
         if ($j % 2 != 0) {
-            $string .= '-'.(int)$buffer[$j].', ';
+            $string .= '-' . (int)$buffer[$j] . ', ';
         }
         if ($j % 2 == 0) {
             $string .= (int)$buffer[$j];
         }
     }
 
-    $string .= '-'.$buffer[count($buffer)-1];
+    $string .= '-' . $buffer[count($buffer) - 1];
 
     return $string;
 }
@@ -95,24 +152,65 @@ function buffer($fromSentence, $toSentence)
 
     $countArr = count($fromSentence) - 1;
 
-    for ($i = 0; $i < $countArr; $i++) {
-        if ($fromSentence[$i + 1] <= $toSentence[$i] || $fromSentence[$i + 1] - $toSentence[$i] < 2) {
+    $jump = 0;
+
+    $iteration = 0;
+
+    foreach ($fromSentence as $key=>$value)
+    {
+
+        if ($key == 0)
+        {
+            $iteration++;
+            continue;
+        };
+
+//        if ($key >= $iteration && $sw == 1)
+//        {
+//            $iteration++;
+//            continue;
+//        };
+
+        if ($iteration<$jump)
+        {
+            $iteration++;
             continue;
         }
 
-        if ($fromSentence[$i] < $toSentence[$i]) {
-            $buffer[] = $toSentence[$i];
-            $buffer[] = $fromSentence[$i + 1];
+        if ($key >= $iteration)
+        {
+            $buffer[] = $value;
+            $jump = $key;
+            $iteration++;
+            continue;
+        };
+
+        if ($fromSentence[$iteration] < $toSentence[$iteration]) {
+            $buffer[] = $toSentence[$iteration];
+            $buffer[] = $fromSentence[$iteration + 1];
         }
 
-        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
-            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
-        }
+        $iteration++;
+
     }
+
+//    for ($i = 0; $i < $countArr; $i++) {
+//
+//        if ($fromSentence[$i + 1] - $toSentence[$i] < 2) {
+//            continue;
+//        }
+//
+//        if ($fromSentence[$i] < $toSentence[$i]) {
+//            $buffer[] = $toSentence[$i];
+//            $buffer[] = $fromSentence[$i + 1];
+//        }
+//
+//        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
+//            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
+//        }
+//    }
     $buffer[] = $toSentence[$countArr];
 
     return $buffer;
 }
-
-rate();
 ?>
