@@ -152,15 +152,6 @@ function arrayToString($month, $buffer)
 
 function buffer($fromSentence, $toSentence)
 {
-
-//    $double = $fromSentence;
-//
-//    ksort($double);
-//
-//    unset($fromSentence[3]);
-//
-//    $buffer = $fromSentence;
-
     $iteration = 0;
 
     foreach ($fromSentence as $key=>$value)
@@ -174,8 +165,10 @@ function buffer($fromSentence, $toSentence)
             }
             $iteration = $key;
         }
-        $buffer[]=$fromSentence[$iteration];
-        $buffer[]=$toSentence[$iteration];
+        if (isset($fromSentence[$iteration])){$buffer[]=$fromSentence[$iteration];}
+        if (isset($toSentence[$iteration])){$buffer[]=$toSentence[$iteration];}
+
+
         $iteration++;
     }
     return $buffer;
