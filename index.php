@@ -18,7 +18,7 @@
 <?php
 function rate()
 {
-    if (file_exists('test.json')) {
+    if (file_exists('test1.json')) {
         $json = file_get_contents('test.json');
         $jsonArray = json_decode($json, true);
 
@@ -41,7 +41,7 @@ function rate()
 
         return arrayToString($month, $buffer);
     } else {
-        echo "Choose a correct file!";
+        return "Choose a correct file!";
     }
 }
 
