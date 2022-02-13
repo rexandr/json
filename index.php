@@ -148,68 +148,27 @@ function arrayToString($month, $buffer)
 
 function buffer($fromSentence, $toSentence)
 {
-    $buffer[] = $fromSentence[0];
+//    $buffer[] = $fromSentence[0];
 
-    $countArr = count($fromSentence) - 1;
 
-    $jump = 0;
+    for ($i = 0; $i < $countArr; $i++) {
 
-    $iteration = 0;
-
-    foreach ($fromSentence as $key=>$value)
-    {
-
-        if ($key == 0)
-        {
-            $iteration++;
-            continue;
-        };
-
-//        if ($key >= $iteration && $sw == 1)
-//        {
-//            $iteration++;
-//            continue;
-//        };
-
-        if ($iteration<$jump)
-        {
-            $iteration++;
+        if ($fromSentence[$i + 1] - $toSentence[$i] < 2) {
             continue;
         }
 
-        if ($key >= $iteration)
-        {
-            $buffer[] = $value;
-            $jump = $key;
-            $iteration++;
-            continue;
-        };
-
-        if ($fromSentence[$iteration] < $toSentence[$iteration]) {
-            $buffer[] = $toSentence[$iteration];
-            $buffer[] = $fromSentence[$iteration + 1];
+        if ($fromSentence[$i] < $toSentence[$i]) {
+            $buffer[] = $toSentence[$i];
+            $buffer[] = $fromSentence[$i + 1];
         }
 
-        $iteration++;
-
+        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
+            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
+        }
     }
 
-//    for ($i = 0; $i < $countArr; $i++) {
-//
-//        if ($fromSentence[$i + 1] - $toSentence[$i] < 2) {
-//            continue;
-//        }
-//
-//        if ($fromSentence[$i] < $toSentence[$i]) {
-//            $buffer[] = $toSentence[$i];
-//            $buffer[] = $fromSentence[$i + 1];
-//        }
-//
-//        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
-//            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
-//        }
-//    }
-    $buffer[] = $toSentence[$countArr];
+
+//    $buffer[] = $toSentence[$countArr];
 
     return $buffer;
 }
