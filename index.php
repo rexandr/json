@@ -18,7 +18,7 @@
 <?php
 function rate()
 {
-    if (file_exists('test1.json')) {
+    if (file_exists('test.json')) {
         $json = file_get_contents('test.json');
         $jsonArray = json_decode($json, true);
 
