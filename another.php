@@ -10,8 +10,14 @@
 <body>
 
 <div>
-    <a href="another.php">ANOTHER</a><br>
-    <?= rate(); ?>
+    <a href="index.php">ONE</a><br>
+    <?php
+    $ranges = rate();
+    foreach ($ranges as $range)
+    {
+        echo $range.'<br>';
+    }
+    ?>
 </div>
 </body>
 </html>
@@ -20,20 +26,37 @@
 <?php
 function rate()
 {
-    if (file_exists('test.json')) {
-        $json = file_get_contents('test.json');
-        $jsonArray = json_decode($json, true);
+    $file = 'another.json';
 
+    if (file_exists($file)) {
+        $json = file_get_contents($file);
+        $jsonArray = json_decode($json, true);
+        
         foreach ($jsonArray as $arr) {
-            foreach ($arr as $key => $value) {
-                if ($key === 'from') {
-                    $fromSentence [] = mb_substr($value, 3, 2);
-                }
-                if ($key === 'to') {
-                    $toSentence [] = mb_substr($value, 3, 2);
-                }
+            $ranges[] = differentRanges($arr);
+
+        }
+
+        return $ranges;
+    } else {
+        return "Choose a correct file!";
+    }
+}
+
+function differentRanges($array)
+{
+
+    foreach ( $array as $arr) {
+        foreach ($arr as $key => $value) {
+            if ($key === 'from') {
+                $fromSentence [] = mb_substr($value, 3, 2);
+            }
+            if ($key === 'to') {
+                $toSentence [] = mb_substr($value, 3, 2);
             }
         }
+    }
+
         asort($fromSentence);
         asort($toSentence);
 
@@ -42,10 +65,8 @@ function rate()
         $buffer = buffer($fromSentence, $toSentence);
 
         return arrayToString($month, $buffer);
-    } else {
-        return "Choose a correct file!";
-    }
 }
+
 
 function month($number)
 {
