@@ -170,13 +170,14 @@ function buffer($fromSentence, $toSentence)
             for ($i= $iteration; $i<$key; $i++)
             {
                 unset($fromSentence[$i]);
+
             }
+            $iteration = $key;
         }
+        $buffer[]=$fromSentence[$iteration];
+        $buffer[]=$toSentence[$iteration];
         $iteration++;
     }
-
-    $buffer=$fromSentence;
-
     return $buffer;
 }
 
