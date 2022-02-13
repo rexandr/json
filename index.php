@@ -154,23 +154,36 @@ function buffer($fromSentence, $toSentence)
 {
     $iteration = 0;
 
-    foreach ($fromSentence as $key=>$value)
-    {
-        if ($key>$iteration)
-        {
-            for ($i= $iteration; $i<$key; $i++)
-            {
+    foreach ($fromSentence as $key => $value) {
+        if ($key > $iteration) {
+            for ($i = $iteration; $i < $key; $i++) {
                 unset($fromSentence[$i]);
-
             }
+
+
             $iteration = $key;
         }
-        if (isset($fromSentence[$iteration])){$buffer[]=$fromSentence[$iteration];}
-        if (isset($toSentence[$iteration])){$buffer[]=$toSentence[$iteration];}
 
+        if (isset($fromSentence[$iteration])) {
+            $buffer[] = $fromSentence[$iteration];
+            $buffer[] = $toSentence[$iteration];
+        }
 
         $iteration++;
     }
+
+//    for ($i= 1; $i<count($buffer)-1; $i++)
+//    {
+//        if ($buffer[$i]-$buffer[$i-1]<=1)
+//        {
+//            unset($buffer[$i]);
+//            unset($buffer[$i-1]);
+//            $i++;
+//        }
+//    }
+
+    $buffer = array_values($buffer);
+
     return $buffer;
 }
 
