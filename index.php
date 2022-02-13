@@ -200,6 +200,18 @@ function buffer($fromSentence, $toSentence)
 
     $buffer = array_values($buffer);
 
+    for ($i= 1; $i<count($buffer)-1; $i++)
+    {
+        if ($buffer[$i]-$buffer[$i-1]<=1)
+        {
+            unset($buffer[$i]);
+            unset($buffer[$i-1]);
+            $i++;
+        }
+    }
+
+    $buffer = array_values($buffer);
+
     return $buffer;
 }
 
