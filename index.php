@@ -18,29 +18,9 @@
     <title>json</title>
 </head>
 <body>
-<div style="width:100%; height:1px; clear:both;"></div>
-
-<div id="line_block"></div>
-<div id="line_block"><?php echo '<pre>';
-    print_r(rate()[0]);
-    echo '</pre>'; ?></div>
-<div id="line_block"><?php echo '<pre>';
-    print_r(rate()[1]);
-    echo '</pre>'; ?></div>
-<div id="line_block"><?php echo '<pre>';
-    print_r(rate()[2]);
-    echo '</pre>'; ?></div>
-<div id="line_block"><?php echo '<pre>';
-    print_r(rate()[3]);
-    echo '</pre>'; ?></div>
-<div id="line_block"><?php echo '<pre>';
-    print_r(rate()[4]);
-    echo '</pre>'; ?></div>
-<div id="line_block"><?php echo '<pre>';
-    print_r(rate()[5]);
-    echo '</pre>'; ?></div>
-
-<div style="width:100%; height:1px; clear:both;"></div>
+<div>
+    <?= rate(); ?>
+</div>
 </body>
 </html>
 
@@ -52,8 +32,6 @@ function rate()
         $json = file_get_contents('test.json');
         $jsonArray = json_decode($json, true);
 
-        $arrayAr = [];
-
         foreach ($jsonArray as $arr) {
             foreach ($arr as $key => $value) {
                 if ($key === 'from') {
@@ -64,27 +42,17 @@ function rate()
                 }
             }
         }
-        $arrayAr[] = $fromSentence;
-        $arrayAr[] = $toSentence;
         asort($fromSentence);
         asort($toSentence);
-        $arrayAr[] = $fromSentence;
-        $arrayAr[] = $toSentence;
 
         $month = month((int)mb_substr($value, 0, 2));
 
         $buffer = buffer($fromSentence, $toSentence);
 
-        $arrayAr[] = $buffer;
-        $arrayAr[] = arrayToString($month, $buffer);
-        //echo arrayToString($month, $buffer);
-
-        return $arrayAr;
+        return arrayToString($month, $buffer);
     } else {
         echo "Choose a correct file!";
     }
-
-
 }
 
 function month($number)
@@ -162,10 +130,8 @@ function buffer($fromSentence, $toSentence)
 
             $anotherTo = null;
 
-            for ($j=$iteration; $j<$key; $j++)
-            {
-                if ($toSentence[$j]>$toSentence[$key])
-                {
+            for ($j = $iteration; $j < $key; $j++) {
+                if ($toSentence[$j] > $toSentence[$key]) {
                     $anotherTo = $toSentence[$j];
                 }
             }
@@ -176,11 +142,10 @@ function buffer($fromSentence, $toSentence)
         if (isset($fromSentence[$iteration])) {
             $buffer[] = $fromSentence[$iteration];
 
-            if (isset($anotherTo))
-            {
-                $buffer[] =$anotherTo;
+            if (isset($anotherTo)) {
+                $buffer[] = $anotherTo;
                 $anotherTo = null;
-            }else{
+            } else {
                 $buffer[] = $toSentence[$iteration];
             }
         }
@@ -188,24 +153,20 @@ function buffer($fromSentence, $toSentence)
         $iteration++;
     }
 
-    for ($i= 1; $i<count($buffer)-1; $i++)
-    {
-        if ($buffer[$i]-$buffer[$i-1]<=1)
-        {
+    for ($i = 1; $i < count($buffer) - 1; $i++) {
+        if ($buffer[$i] - $buffer[$i - 1] <= 1) {
             unset($buffer[$i]);
-            unset($buffer[$i-1]);
+            unset($buffer[$i - 1]);
             $i++;
         }
     }
 
     $buffer = array_values($buffer);
 
-    for ($i= 1; $i<count($buffer)-1; $i++)
-    {
-        if ($buffer[$i]-$buffer[$i-1]<=1)
-        {
+    for ($i = 1; $i < count($buffer) - 1; $i++) {
+        if ($buffer[$i] - $buffer[$i - 1] <= 1) {
             unset($buffer[$i]);
-            unset($buffer[$i-1]);
+            unset($buffer[$i - 1]);
             $i++;
         }
     }
