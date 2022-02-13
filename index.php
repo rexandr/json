@@ -40,6 +40,7 @@ function rate()
             continue;
         }
 
+
         if ($sentence[$i] < $sentence[$i + 1] && $i % 2 != 0) {
             $buffer .= '-' . $sentence[$i] . ', ';
         }elseif ($sentence[$i] > $sentence[$i + 2] && $i<(count($sentence) - 2)){
