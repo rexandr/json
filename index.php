@@ -152,44 +152,30 @@ function arrayToString($month, $buffer)
 
 function buffer($fromSentence, $toSentence)
 {
-//    $buffer[] = $fromSentence[0];
+
+//    $double = $fromSentence;
+//
+//    ksort($double);
+//
+//    unset($fromSentence[3]);
+//
+//    $buffer = $fromSentence;
 
     $iteration = 0;
 
-    foreach ($fromSentence as $key => $value) {
-
-        //echo $key.'-'.$value.'<br>';
-
-        if ($key<$iteration)
+    foreach ($fromSentence as $key=>$value)
+    {
+        if ($key>$iteration)
         {
-            continue;
-//            echo $key.'-'.$iteration;
-//            unset($fromSentence[$key]);
+            for ($i= $iteration; $i<$key; $i++)
+            {
+                unset($fromSentence[$i]);
+            }
         }
-
-        $buffer[] = $value;
-         $iteration++;
+        $iteration++;
     }
 
-
-//    for ($i = 0; $i < $countArr; $i++) {
-//
-//        if ($fromSentence[$i + 1] - $toSentence[$i] < 2) {
-//            continue;
-//        }
-//
-//        if ($fromSentence[$i] < $toSentence[$i]) {
-//            $buffer[] = $toSentence[$i];
-//            $buffer[] = $fromSentence[$i + 1];
-//        }
-//
-//        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
-//            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
-//        }
-//    }
-
-
-//    $buffer[] = $toSentence[$countArr];
+    $buffer=$fromSentence;
 
     return $buffer;
 }
