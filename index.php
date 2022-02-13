@@ -22,20 +22,23 @@
 
 <div id="line_block"></div>
 <div id="line_block"><?php echo '<pre>';
-print_r(rate()[0]);
-echo '</pre>';?></div>
+    print_r(rate()[0]);
+    echo '</pre>'; ?></div>
 <div id="line_block"><?php echo '<pre>';
     print_r(rate()[1]);
-    echo '</pre>';?></div>
+    echo '</pre>'; ?></div>
 <div id="line_block"><?php echo '<pre>';
     print_r(rate()[2]);
-    echo '</pre>';?></div>
+    echo '</pre>'; ?></div>
 <div id="line_block"><?php echo '<pre>';
     print_r(rate()[3]);
-    echo '</pre>';?></div>
+    echo '</pre>'; ?></div>
 <div id="line_block"><?php echo '<pre>';
     print_r(rate()[4]);
-    echo '</pre>';?></div>
+    echo '</pre>'; ?></div>
+<div id="line_block"><?php echo '<pre>';
+    print_r(rate()[5]);
+    echo '</pre>'; ?></div>
 
 <div style="width:100%; height:1px; clear:both;"></div>
 </body>
@@ -72,6 +75,7 @@ function rate()
 
         $buffer = buffer($fromSentence, $toSentence);
 
+        $arrayAr[] = $buffer;
         $arrayAr[] = arrayToString($month, $buffer);
         //echo arrayToString($month, $buffer);
 
@@ -150,26 +154,44 @@ function buffer($fromSentence, $toSentence)
 {
 //    $buffer[] = $fromSentence[0];
 
+    $iteration = 0;
 
-    for ($i = 0; $i < $countArr; $i++) {
+    foreach ($fromSentence as $key => $value) {
 
-        if ($fromSentence[$i + 1] - $toSentence[$i] < 2) {
+        //echo $key.'-'.$value.'<br>';
+
+        if ($key<$iteration)
+        {
             continue;
+//            echo $key.'-'.$iteration;
+//            unset($fromSentence[$key]);
         }
 
-        if ($fromSentence[$i] < $toSentence[$i]) {
-            $buffer[] = $toSentence[$i];
-            $buffer[] = $fromSentence[$i + 1];
-        }
-
-        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
-            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
-        }
+        $buffer[] = $value;
+         $iteration++;
     }
+
+
+//    for ($i = 0; $i < $countArr; $i++) {
+//
+//        if ($fromSentence[$i + 1] - $toSentence[$i] < 2) {
+//            continue;
+//        }
+//
+//        if ($fromSentence[$i] < $toSentence[$i]) {
+//            $buffer[] = $toSentence[$i];
+//            $buffer[] = $fromSentence[$i + 1];
+//        }
+//
+//        if ($fromSentence[$i + 1] > $fromSentence[$i + 2] && !empty($fromSentence[$i + 2])) {
+//            $buffer[count($buffer) - 1] = $fromSentence[$i + 2];
+//        }
+//    }
 
 
 //    $buffer[] = $toSentence[$countArr];
 
     return $buffer;
 }
+
 ?>
